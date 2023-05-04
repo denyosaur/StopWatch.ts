@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+function App(): JSX.Element {
   const [isStart, setIsStart] = useState<boolean>(false);
   const [laps, setLaps] = useState<string[]>([]);
   const [time, setTime] = useState<number>(0);
@@ -20,15 +20,15 @@ function App() {
     return () => clearInterval(interval);
   }, [isStart]);
 
-  const converToString = (time: number) => {
+  const converToString = (time: number): string => {
     const date: Date = new Date(0);
     date.setSeconds(time);
     return date.toISOString().substring(11, 19);
   };
 
-  const toggleTimer = () => setIsStart(!isStart);
+  const toggleTimer = (): void => setIsStart(!isStart);
 
-  const resetAndLapButton = () => {
+  const resetAndLapButton = (): void => {
     if (isStart) {
       setLaps(prevLaps => [...prevLaps, converToString(time)]);
     } else {
