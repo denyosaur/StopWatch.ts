@@ -1,0 +1,27 @@
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  width: 20rem;
+}
+
+.button-container button {
+  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
+}
+
+.redButton {
+  background-color: rgb(84, 0, 0);
+  color: red;
+}
+
+.greenButton {
+  background-color: rgb(0, 93, 0);
+  color: rgb(0, 180, 0);
+}
+
+.greyButton {
+  background-color: grey;
+  color: white;
+}
