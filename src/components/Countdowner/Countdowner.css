@@ -1,0 +1,15 @@
+.countdowner-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.countdowner-input {
+  height: 2rem;
+}
+
+.countdowner-lap-list {
+  display: flex;
+  flex-direction: column-reverse;
+}
