@@ -2,11 +2,12 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: auto;
+
 }
 
 .countdowner-input {
   height: 2rem;
+  width: auto;
 }
 
 .countdowner-lap-list {

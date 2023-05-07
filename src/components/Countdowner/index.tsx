@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import './Countdowner.css';
 import Buttons from '../Buttons';
+import Confetti from '../Confetti';
 import Timer from '../Timer';
 
 const Countdowner: React.FC = () => {
   const [isStart, setIsStart] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<number>(0);
   const [time, setTime] = useState<number>(0);
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
@@ -18,6 +20,7 @@ const Countdowner: React.FC = () => {
           if (prevTime <= 1) {
             clearInterval(interval);
             setIsStart(false);
+            setShowConfetti(true);
           }
           return prevTime - 1;
         });
@@ -50,6 +53,15 @@ const Countdowner: React.FC = () => {
         <h1>Countdowner</h1>
       </div>
       <Timer time={time} />
+      <div className="countdowner-button">
+        <Buttons
+          isDisabled={startTime <= 0}
+          isCountdown={true}
+          isStart={isStart}
+          resetAndLapButton={resetButton}
+          toggleTimer={toggleTimer}
+        />
+      </div>
       <div className="countdowner-input">
         <label>Number to count from: </label>
         <input
@@ -59,13 +71,7 @@ const Countdowner: React.FC = () => {
           value={startTime}
         />
       </div>
-      <Buttons
-        isDisabled={startTime <= 0}
-        isCountdown={true}
-        isStart={isStart}
-        resetAndLapButton={resetButton}
-        toggleTimer={toggleTimer}
-      />
+      {showConfetti ? <Confetti showConfetti={showConfetti} setShowConfetti={setShowConfetti} /> : <></>}
     </div>
   );
 }

@@ -1,7 +1,10 @@
 .App {
   background-color: #282c34;
   color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: auto;
   text-align: center;
 }
 
@@ -39,5 +42,9 @@
 }
 
 .timer-container {
+  display: flex;
+  height: 100%;
+  justify-content: space-around;
   margin-top: 5rem;
+  width: 100%;
 }

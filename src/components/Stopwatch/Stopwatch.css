@@ -9,7 +9,3 @@
   display: flex;
   flex-direction: column-reverse;
 }
-
-.stopwatch-button {
-  margin-top: 2rem;
-}
