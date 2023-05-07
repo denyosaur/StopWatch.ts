@@ -4,81 +4,86 @@ import anime from 'animejs';
 import './Confetti.css';
 
 const Confetti: React.FC<Props> = ({ showConfetti, setShowConfetti }) => {
-  const confettiRef = useRef<HTMLCanvasElement>(null);
+  const confettiRef: ConfettiRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    let colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
-    let positions = 100
-    let H = window.innerHeight;
-    let W = window.innerWidth;
+    let colors: string[] = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
+    let positions: number = 500;
+    let H: number = window.innerHeight;
+    let W: number = window.innerWidth;
+    const refCurrent: HTMLCanvasElement | null = confettiRef.current;
+    const ctx = refCurrent?.getContext('2d');
 
-    let ctx: null | CanvasRenderingContext2D;
-    if (confettiRef.current !== null) {
-      ctx = confettiRef.current.getContext('2d');
-    }
-
-    function setCanvasSize() {
-      if (confettiRef.current !== null && ctx !== null) {
+    const setCanvasSize = (): void => {
+      if (confettiRef.current !== null && ctx !== null && ctx !== undefined) {
         confettiRef.current.width = W;
         confettiRef.current.height = H;
         confettiRef.current.style.width = window.innerWidth + 'px';
         confettiRef.current.style.height = window.innerHeight + 'px';
         ctx.scale(1, 1);
-      }
-    }
+      };
+    };
 
-    const startPositions = () => {
-      const record = Array(positions).map((_, index) => {
+    const startPositions = (): Array<{ x: number, y: number }> => {
+      const record: Array<{ x: number, y: number }> = Array(positions).fill(0).map(() => {
         return {
           x: anime.random(0, W),
           y: -128
-        }
-      })
+        };
+      });
       return record;
-    }
+    };
 
-    const endPosition = () => {
+    const endPosition = (): { x: number, y: number } => {
       return {
-        x: anime.random(-(W / 4), (W * 1.2)),
+        x: anime.random(-(W * 0.2), (W * 1.2)),
         y: H,
-      }
-    }
+      };
+    };
 
     const createSquare = (position: { x: number, y: number }) => {
       let confetti: confetti = {
-        x: position.x,
-        y: position.y,
-        width: anime.random(3, 8),
-        height: anime.random(1, 8),
-        delay: anime.random(0, 200),
-        duration: anime.random(3000, 12000),
-        color: colors[anime.random(0, colors.length - 1)],
-        endPos: endPosition(),
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        delay: 0,
+        duration: 0,
+        color: '',
+        endPos: {},
         draw: () => { },
       }
-      confetti.draw = () => {
-        if (ctx !== null) {
-          ctx.beginPath()
-          ctx.rect(confetti.x, confetti.y, confetti.width, confetti.height)
+      confetti.x = position.x
+      confetti.y = position.y
+      confetti.width = anime.random(3, 8)
+      confetti.height = anime.random(1, 8)
+      confetti.delay = anime.random(0, 1500)
+      confetti.duration = anime.random(2000, 7000)
+      confetti.color = colors[anime.random(0, colors.length - 1)]
+      confetti.endPos = endPosition()
+      confetti.draw = (): void => {
+        if (ctx !== null && ctx !== undefined) {
+          ctx.beginPath();
+          ctx.rect(confetti.x, confetti.y, confetti.width, confetti.height);
           ctx.scale(-1, 1);
-          ctx.lineJoin = "round"
-          ctx.globalAlpha = 0.9
-          ctx.fillStyle = confetti.color
-          ctx.fill()
+          ctx.lineJoin = "round";
+          ctx.globalAlpha = 0.9;
+          ctx.fillStyle = confetti.color;
+          ctx.fill();
         }
       }
-      return confetti
+      return confetti;
     }
 
-    const animateSquares = () => {
-      let particules: any = []
-      let confettis = startPositions()
+    const animateSquares = (): any => {
+      let particules: confetti[] = [];
+      let confettis = startPositions();
 
       confettis.forEach(item => {
-        particules[particules.length] = createSquare(item)
-      })
+        particules[particules.length] = createSquare(item);
+      });
 
-      anime.timeline().add({
+      let animation = anime.timeline().add({
         targets: particules,
         x: (confetti: { endPos: { x: number } }) => { return confetti.endPos.x },
         y: (confetti: { endPos: { y: number } }) => { return confetti.endPos.y },
@@ -86,7 +91,8 @@ const Confetti: React.FC<Props> = ({ showConfetti, setShowConfetti }) => {
         delay: (confetti: any) => { return confetti.delay },
         easing: 'easeOutSine',
         update: renderSquare,
-      })
+      }).finished.then(() => setShowConfetti(false));
+      return animation;
     }
 
     const renderSquare = (anim: any) => {
@@ -97,24 +103,25 @@ const Confetti: React.FC<Props> = ({ showConfetti, setShowConfetti }) => {
 
     const render = anime({
       duration: Infinity,
-      update: function () {
-        if (ctx !== null) {
-          ctx.clearRect(0, 0, W, H);
-        }
+      update: function (): void {
+        ctx?.clearRect(0, 0, W, H);
       }
     });
 
     if (showConfetti) {
-      const renderLoop = () => {
+      const renderLoop = (): void => {
         animateSquares();
-        render.play()
-        anime({}).finished.then(renderLoop);
-      }
+        render.play();
+      };
 
-      renderLoop()
-      setCanvasSize()
+      renderLoop();
+      setCanvasSize();
     }
-  }, [showConfetti]);
+  }, [
+    showConfetti,
+    confettiRef,
+    setShowConfetti,
+  ]);
 
   const handleClose = (): void => {
     setShowConfetti(false);
@@ -143,5 +150,7 @@ interface confetti {
   endPos: object;
   draw: Function;
 }
+
+type ConfettiRef = React.RefObject<HTMLCanvasElement>;
 
 export default Confetti;

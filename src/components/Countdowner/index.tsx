@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import './Countdowner.css';
 import Buttons from '../Buttons';
-import Confetti from '../Confetti';
+import Confetti from '../Confetti/index';
 import Timer from '../Timer';
 
 const Countdowner: React.FC = () => {
