@@ -1,60 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
+import Countdowner from './components/Countdowner';
+import Stopwatch from './components/Stopwatch';
+
 function App(): JSX.Element {
-  const [isStart, setIsStart] = useState<boolean>(false);
-  const [laps, setLaps] = useState<string[]>([]);
-  const [time, setTime] = useState<number>(0);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
-
-    if (isStart) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-      }, 10);
-    } else {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [isStart]);
-
-  const converToString = (time: number): string => {
-    const date: Date = new Date(0);
-    date.setSeconds(time);
-    return date.toISOString().substring(11, 19);
-  };
-
-  const toggleTimer = (): void => setIsStart(!isStart);
-
-  const resetAndLapButton = (): void => {
-    if (isStart) {
-      setLaps(prevLaps => [...prevLaps, converToString(time)]);
-    } else {
-      setTime(0);
-      setLaps([]);
-    }
-  };
+  const [timeKeeperToShow, setTimeKeeperToShow] = useState<string>('stopwatch');
 
   return (
     <div className="App">
-      <header className="App-header">
-        <div>Stopwatch</div>
-      </header>
-      <div className="body-timer">
-        <div className="time-wrapper">
-          {converToString(time)}
-        </div>
-        <div className="button-wrapper">
-          <button className="greyButton" onClick={resetAndLapButton}>{!isStart ? 'Reset' : 'Lap'}</button>
-          <button className={isStart ? 'redButton' : 'greenButton'} onClick={toggleTimer}>{!isStart ? 'Start' : 'Stop'}</button>
-        </div>
-        <div className="lap-list">
-          {laps.map((lap, index) => (
-            <div key={lap}>{`Lap ${index + 1}: ${lap}`}</div>
-          ))}
-        </div>
+      <div className="App-header">
+        <div>Time Keeper</div>
+      </div>
+      <div className="App-options">
+        <button
+          className={timeKeeperToShow === 'stopwatch' ? "button-left active-button" : "button-left"}
+          onClick={() => setTimeKeeperToShow('stopwatch')}
+          value="stopwatch">Stopwatch</button>
+        <button
+          className={timeKeeperToShow === 'countdowner' ? "button-right active-button" : "button-right"}
+          onClick={() => setTimeKeeperToShow('countdowner')}
+          value="countdowner"
+        >Countdowner</button>
+      </div>
+      <div className='timer-container'>
+        {timeKeeperToShow === 'stopwatch'
+          ? <Stopwatch />
+          : <Countdowner />
+        }
       </div>
     </div>
   );

@@ -1,7 +1,10 @@
 .App {
   background-color: #282c34;
   color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: auto;
   text-align: center;
 }
 
@@ -15,46 +18,33 @@
   justify-content: center;
 }
 
-.body-timer {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: auto;
+.App-options {
+  height: 3rem;
+  margin-top: 1rem;
 }
 
-.button-wrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  width: 20rem;
+.App-options button {
+  height: 2rem;
+  width: 8rem;
 }
 
-.button-wrapper button {
-  height: 4rem;
-  width: 4rem;
-  border-radius: 50%;
-}
-
-.greenButton {
+.active-button {
   background-color: rgb(0, 93, 0);
   color: rgb(0, 180, 0);
 }
 
-.greyButton {
-  background-color: grey;
-  color: white;
+.button-left {
+  border-radius: 2rem 0 0 2rem;
 }
 
-.lap-list {
+.button-right {
+  border-radius: 0 2rem 2rem 0;
+}
+
+.timer-container {
   display: flex;
-  flex-direction: column-reverse;
-}
-
-.redButton {
-  background-color: rgb(84, 0, 0);
-  color: red;
-}
-
-.time-wrapper {
-  margin-bottom: 2rem;
+  height: 100%;
+  justify-content: space-around;
+  margin-top: 5rem;
+  width: 100%;
 }
